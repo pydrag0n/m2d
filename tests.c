@@ -1,10 +1,7 @@
 #include <stdio.h>
 
 int main() {
-
-    for(float i; i<=1; i+=0.05){
-        printf("%f", i); 
-    }
+    if(1){printf("%c", 's');}
     return 0;
 }
 

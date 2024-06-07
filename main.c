@@ -15,7 +15,7 @@
 float px, py, pdx, pdy, pa; // player pos, delta, angle
 int map[]=
 {
-    1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,м
     1,0,1,0,0,0,0,1,
     1,0,1,0,0,0,0,1,
     1,0,1,0,0,0,0,1,
@@ -79,7 +79,7 @@ void buttonsMove(unsigned char key, int x, int y)
 
 void buttonsRotate(int key, int x, int y)
 {
-    switch (key) { 
+    switch (key) {
         case GLUT_KEY_LEFT:
             pa -= 0.1;
             if(pa < 0) {pa += 2*PI;}
