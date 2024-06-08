@@ -30,6 +30,7 @@ int spwn = 1;
 pSight = 100;  
 px = centerX;
 py = centerY;
+int pPosX, pPosY;
 pmx = centerX;
 pmy = centerY;
 ps = 41;
@@ -87,9 +88,11 @@ void drawMap() {
             else if (map[y][x]==2 && spwn==1) {
                 px=xo+20;
                 py=yo+20+1;
-                spwn=0;
-            }
-            else {
+                pPosY=y;
+                pPosX=x;
+                spwn=0; 
+            }  
+            else {      
                 glColor3f(0,0,0);
             }
 
@@ -101,7 +104,6 @@ void drawMap() {
         }
         yo+=mapS+1;
         xo=0;
-        
 
     }
     glEnd();
@@ -173,6 +175,10 @@ void regularSqSize(unsigned char key, int x, int y) {
 
     // PLAYER KEYBOARD
         case 'w':
+            if(map[pPosY-1][pPosX]==1) {break;}
+            map[pPosY][pPosX] = 0;
+            pPosY-=1;
+            map[pPosY][pPosX] = 2;
             py-=ps;
             pmx = px;
             pmy = py-pSight;
@@ -180,19 +186,32 @@ void regularSqSize(unsigned char key, int x, int y) {
             break;
 
         case 's':
+            if(map[pPosY+1][pPosX]==1) {break;}
+            map[pPosY][pPosX] = 0;
+            pPosY+=1;
+            map[pPosY][pPosX] = 2;
             py+=ps;
             pmx = px;
             pmy = py+pSight;
-            
             break;
 
         case 'a':
+            if(map[pPosY][pPosX-1]==1) {break;}
+            map[pPosY][pPosX] = 0;
+            pPosX-=1;
+            map[pPosY][pPosX] = 2;
             px-=ps;
             pmx = px-pSight;
             pmy = py;
+
             break;
 
         case 'd':
+            if(map[pPosY][pPosX+1]==1) {break;}
+            map[pPosY][pPosX] = 0;
+            pPosX+=1;
+            map[pPosY][pPosX] = 2;
+
             px+=ps;
             pmx = px+pSight;
             pmy = py;
