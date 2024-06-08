@@ -3,44 +3,108 @@
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <math.h>
+#include <stdlib.h>
 
 
 
-#define width   1000
-#define height  600
+#define width   1200
+#define height  700
 #define centerX width/2
 #define centerY height/2
+#define mapX 25
+#define mapY 15
+#define mapS 40 //size of one block
+
+typedef struct {
+    int x, y; // координаты левого верхнего угла
+    int sideLength; // длина стороны квадрата
+} Square;
 
 
-int sqMap = 1;
+int sqMap = 0; // 0 or 1
 int px, py, ps, pSize; // player x/y // player speed
 int pmx, pmy, pSight; // player sight
-pmx = centerX;
-pmy = centerY;
 
+
+int spwn = 1;
 pSight = 100;  
 px = centerX;
 py = centerY;
-ps = 10;
-pSize = 10;
+pmx = centerX;
+pmy = centerY;
+ps = 41;
+pSize = 40;
 int sqSize=40;
+int d =20;
+int map[mapY][mapX] = {
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+        {1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,},
+        {1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,},
+        {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,},
+        {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,},
+        {1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,},
+        {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,},
+        {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1,},
+        {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1,},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1,},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,},
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+};
 
-void GenerateMap() {
-    glColor3f(1.0f, 1.0f, 0.0f);
-    glBegin(GL_QUADS);
-
-    glVertex2i(400, 400);
-    glVertex2i(400+100, 400);
-    glVertex2i(400+100, 400-100);
-    glVertex2i(400, 400-100);
-
-
-    glEnd();
-
-}
 
 void resize() {
     glutReshapeWindow(width, height);
+}
+
+void drawPlayer() {
+
+    glColor3f(1, 1, 1);
+    glPointSize(pSize);
+    glBegin(GL_POINTS);
+    glVertex2i(px, py);
+
+    glEnd();
+}
+void drawMap() {
+
+    int xo, yo;
+    xo = 0;
+    yo = 80;
+
+    glColor3f(1, 1, 1);
+    glBegin(GL_QUADS);
+    for (int y=0; y<mapY; y++) {
+
+        for (int x=0; x<mapX; x++) {
+            xo+=mapS+1;
+            
+            if (map[y][x]==1) {
+                glColor3f(0,1,1);
+            }
+            else if (map[y][x]==2 && spwn==1) {
+                px=xo+20;
+                py=yo+20+1;
+                spwn=0;
+            }
+            else {
+                glColor3f(0,0,0);
+            }
+
+            glVertex2i(xo, yo);
+            glVertex2i(xo+mapS, yo);
+            glVertex2i(xo+mapS, yo-mapS);
+            glVertex2i(xo, yo-mapS);
+
+        }
+        yo+=mapS+1;
+        xo=0;
+        
+
+    }
+    glEnd();
 }
 
 void KV() {
@@ -57,32 +121,29 @@ void KV() {
     glEnd();
 }
 
-void drawPlayer() {
-    glColor3f(1, 1, 1);
-    glPointSize(pSize);
-    glBegin(GL_POINTS);
-    glVertex2i(px, py);
-    glEnd();
-}
+
 
 void drawPSight() {
+
     glColor3f(0.0f, 1.0f, 0.0f);
     glLineWidth(1);
     glBegin(GL_LINES);
-
     glVertex2i(px, py);
     glVertex2i(pmx, pmy);
+
     glEnd();
 }
 
 void render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if(sqMap){KV();}
+    glColor3f(1.0, 1.0, 1.0); 
+    drawMap();
     drawPSight();
-    GenerateMap();
-
     drawPlayer();
     glutSwapBuffers();
+    _sleep(1);
+    glutPostRedisplay();
 
 }
 
@@ -98,8 +159,9 @@ void regularSqSize(unsigned char key, int x, int y) {
         case 'v': //downsize
             if (!sqMap){break;}
             if (sqSize<=5) {
-                sqSize=5;
+                sqSize-=5;
                 break;
+
             }
             sqSize-=1;
             break;
@@ -137,9 +199,9 @@ void regularSqSize(unsigned char key, int x, int y) {
             break;
 
     }
-
-
     glutPostRedisplay();
+
+
 }
 
 int main(int argc, char* argv[]) {

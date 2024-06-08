@@ -4,7 +4,11 @@
         "windows.h": "c",
         "math.h": "c",
         "stdlib.h": "c",
-        "glut.h": "c"
+        "glut.h": "c",
+        "openglut.h": "c",
+        "openglut_std.h": "c",
+        "openglut_ext.h": "c",
+        "unistd.h": "c"
     },
 
 
