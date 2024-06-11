@@ -210,6 +210,7 @@ void render() {
 
 }
 
+// MOVE
 void moveUp() {
     P.y -= P.step;
     PSight.x = P.x;
@@ -280,25 +281,25 @@ void KeyboardWork(unsigned char key, int x, int y) {
     // --------------------------------------
         case 'w':
 
-            if(map[pPosY-1][pPosX]==1) {break;}
+            if(map[pPosY-1][pPosX]==1 || map[pPosY-1][pPosX]==3) {break;}
             moveUp();
             break;
 
 
         case 's':
 
-            if(map[pPosY+1][pPosX]==1) {break;}
+            if(map[pPosY+1][pPosX]==1 || map[pPosY+1][pPosX]==3) {break;}
             moveDown();
             break;
 
         case 'a':
-            if(map[pPosY][pPosX-1]==1) {break;}
+            if(map[pPosY][pPosX-1]==1 || map[pPosY][pPosX-1]==3) {break;}
             moveLeft();
             break;
 
         case 'd':
 
-            if(map[pPosY][pPosX+1]==1) {break;}
+            if(map[pPosY][pPosX+1]==1 || map[pPosY][pPosX+1]==3) {break;}
             moveRight();
             break;
     }
